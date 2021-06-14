@@ -78,10 +78,10 @@
 		    	if(message.hasOwnProperty(key)){
 		    		console.log(key+"->"+message[key]);
 		    		if(message[key]=="Exception"){
-		    			alert("Invalid stock name, removing the value");
 		    			stocknm=key;
 		    			removeStock();
 		    			removeItem();
+		    			alert("Invalid stock name, removing the value");
 		    			
 		    		}
 		    		document.getElementById(key).innerHTML=message[key];
@@ -90,6 +90,10 @@
 		    } 
 		    
 		    
+		}
+		
+		function closeConnection () {
+		    sock.end();
 		}
 
 		
