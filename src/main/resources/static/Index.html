@@ -74,7 +74,6 @@
 			
 			 console.log("on message received ");
 		    var message = JSON.parse(payload.body);
-		    console.log(count);
 		    for(var key in message){
 		    	if(message.hasOwnProperty(key)){
 		    		console.log(key+"->"+message[key]);
