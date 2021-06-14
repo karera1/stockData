@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>TO-DO</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"> </script>	
+		<script type="text/javascript">
+		
+		var stompClient = null;
+		function addItem(){
+			var ul = document.getElementById("dynamic-list");
+		  var candidate = document.getElementById("candidate");
+		  var li = document.createElement("li");
+		  li.setAttribute('id',candidate.value);
+		  li.appendChild(document.createTextNode(candidate.value));
+		  ul.appendChild(li);
+		}
+
+		function removeItem(){
+			var ul = document.getElementById("dynamic-list");
+		  var candidate = document.getElementById("candidate");
+		  var item = document.getElementById(candidate.value);
+		  ul.removeChild(item);
+		}
+		
+		var stock=null;
+		function removeStock(){
+			
+			  var msg = {
+					  key:document.getElementById("candidate").value,
+					  value:""
+					  }
+			  stompClient.send("/app/stock.removeStock",{},JSON.stringify(msg))			
+			  
+			  
+		}
+		function addStock() {
+			
+			
+			  var msg = {
+					  key:document.getElementById("candidate").value,
+					  value:""
+					  }
+			  stompClient.send("/app/stock.addStock",{},JSON.stringify(msg))			
+			  var messageElement=document.createElement('li');
+			  
+			  }; 
+		
+		function connect() {
+			console.log("yes ... we are in connect");
+			
+		    var socket=new SockJS('/stockdt');
+		    stompClient=Stomp.over(socket);
+		    /*stompClient.connect({},function(frame){stompClient.subscribe('/topic/public',function(messageOutput) {
+                showMessageOutput(JSON.parse(messageOutput.body))})},onError());
+		    */
+		    
+		    stompClient.connect({}, onConnected, onError);
+		    
+		    event.preventDefault();
+		    }
+		
+		function onConnected() {
+		    // Subscribe to the Public Topic
+		    alert(stompClient);
+		    stompClient.subscribe('/topic/public', onMessageRecieved);
+		    console.log("subscribed");
+
+		 }
+		
+		function onMessageRecieved(payload) {
+			
+			 console.log("on message received ");
+		    var message = JSON.parse(payload.body);
+		    console.log(count);
+		    for(var key in message){
+		    	if(message.hasOwnProperty(key)){
+		    		console.log(key+"->"+message[key]);
+		    		document.getElementById(key).innerHTML=message[key];
+		    		
+		    	}
+		    } 
+		    console.log("ther afdasf dasf " + message);
+		    
+		}
+
+		
+		    
+		function onError() {
+			console.log('ERROR: Not Enough Child Elements to remove (script.js:25)')
+			}
+		function showMessageOutput(messageOutput){
+			var response=document.getElementById(messageOutput.key);
+		
+			/* console.log("reached");
+			var stockdata=JSON.parse(payload.body);
+			var messageElement=document.createElement();
+			messageElement.classList.add('stockdata.value');  
+			var textnode=document.createTextNode(message.content);
+			messageElement.append(textnode); */
+		}
+		  
+
+		</script>
+		<link rel="stylesheet" type="text/css" href="main.css">
+	</head>
+	<body onload=connect(),scheduledRefresh()>
+<ul id="dynamic-list"></ul>
+
+<input type="text" id="candidate"/>
+<button onclick="addItem(),addStock()">add item</button>
+<button onclick="removeItem(),removeStock()">remove item</button>
+</body>
+</html>

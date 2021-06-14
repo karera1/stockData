@@ -1,0 +1,44 @@
+* {
+	font-family: "Times New Roman", Times, serif;
+}
+
+body {
+	background-color: pink;
+}
+
+fieldset {
+	border: none;
+}
+
+input[type=text] {
+	padding: 12px 20px;
+	border-radius: 5px;
+	border: 1px solid grey;
+	font-size: 25px;
+	margin: 2px;
+}
+
+button {
+	background-color: green;
+	border: none;
+	border-radius: 6px; /* rounded corner look */
+	color: white; /* button text color */
+	text-align: center;
+	font-size: 16px;
+	margin: 1px;
+}
+
+ul {
+	list-style-type: none;
+  	margin: 0;
+  	padding: 0;
+}
+
+li {
+	background-color: grey;
+	margin: 3px;
+	font-size: 50px;
+	border-radius: 5px;
+	color: white;
+	padding-left: 15px;
+}
