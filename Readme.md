@@ -22,5 +22,3 @@ Step 5:
 open a new browser and run the client using the following url
 
 http://localhost:8080/
-
-Note: currently this method is not working still working on resolving this issue. Need to pull the code to eclipse/Intellij and run it.
