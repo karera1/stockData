@@ -11,17 +11,17 @@
 		var stompClient = null;
 		function addItem(){
 			var ul = document.getElementById("dynamic-list");
-		  var candidate = document.getElementById("candidate");
+		  var stocknm = document.getElementById("stocknm");
 		  var li = document.createElement("li");
-		  li.setAttribute('id',candidate.value);
-		  li.appendChild(document.createTextNode(candidate.value));
+		  li.setAttribute('id',stocknm.value);
+		  li.appendChild(document.createTextNode(stocknm.value));
 		  ul.appendChild(li);
 		}
 
 		function removeItem(){
 			var ul = document.getElementById("dynamic-list");
-		  var candidate = document.getElementById("candidate");
-		  var item = document.getElementById(candidate.value);
+		  var stocknm = document.getElementById("stocknm");
+		  var item = document.getElementById(stocknm.value);
 		  ul.removeChild(item);
 		}
 		
@@ -29,7 +29,7 @@
 		function removeStock(){
 			
 			  var msg = {
-					  key:document.getElementById("candidate").value,
+					  key:document.getElementById("stocknm").value,
 					  value:""
 					  }
 			  stompClient.send("/app/stock.removeStock",{},JSON.stringify(msg))			
@@ -40,7 +40,7 @@
 			
 			
 			  var msg = {
-					  key:document.getElementById("candidate").value,
+					  key:document.getElementById("stocknm").value,
 					  value:""
 					  }
 			  stompClient.send("/app/stock.addStock",{},JSON.stringify(msg))			
@@ -62,9 +62,9 @@
 		    event.preventDefault();
 		    }
 		
+		
 		function onConnected() {
 		    // Subscribe to the Public Topic
-		    alert(stompClient);
 		    stompClient.subscribe('/topic/public', onMessageRecieved);
 		    console.log("subscribed");
 
@@ -77,11 +77,18 @@
 		    for(var key in message){
 		    	if(message.hasOwnProperty(key)){
 		    		console.log(key+"->"+message[key]);
+		    		if(message[key]=="Exception"){
+		    			alert("Invalid stock name, removing the value");
+		    			stocknm=key;
+		    			removeStock();
+		    			removeItem();
+		    			
+		    		}
 		    		document.getElementById(key).innerHTML=message[key];
 		    		
 		    	}
 		    } 
-		    console.log("ther afdasf dasf " + message);
+		    
 		    
 		}
 
@@ -105,11 +112,12 @@
 		</script>
 		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
-	<body onload=connect(),scheduledRefresh()>
-<ul id="dynamic-list"></ul>
+	<body onload=connect()>
 
-<input type="text" id="candidate"/>
-<button onclick="addItem(),addStock()">add item</button>
-<button onclick="removeItem(),removeStock()">remove item</button>
+
+<input type="text" id="stocknm"/>
+<button onclick="addItem(),addStock()">Add Stock</button>
+<button onclick="removeItem(),removeStock()">Remove Stock</button>
+<ul id="dynamic-list"></ul>
 </body>
 </html>

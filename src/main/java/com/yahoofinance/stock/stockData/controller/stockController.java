@@ -23,15 +23,24 @@ public class stockController {
 	@MessageMapping("/stock.addStock")
 	@SendTo("/topic/public")
 	public void addStock(@Payload Map<String, String> stockobj) throws Exception {
+		
 		String stockName = stockobj.get("key");
+		try {
 		String str = YahooFinance.get(stockobj.get("key")).toString();
-
+		if(null!=str) {
+		
 		stocks.put(stockName, str);
 		template.convertAndSend("/topic/public", stocks);
-
-		System.out.println("Sent" + stocks);
+		}
+		System.out.println("Sent" + stocks);}
+		catch(Exception e) {
+			System.out.println("stockid :"+stockobj.get("key")+"is not a valid entry");
+			String str="Exception";
+			stocks.put(stockName, str);
+			template.convertAndSend("/topic/public", stocks);
+		}
 	}
-
+	
 	@MessageMapping("/stock.removeStock")
 	@SendTo("/topic/public")
 	public void removeStock(@Payload Map<String, String> stockobj) throws IOException {
