@@ -11,7 +11,7 @@ cd stockData
 
 Step 3:
 unpack all the Maven packages and run unit test
-mvn package
+"mvn package"
 
 Step 4:
 Run the application snapshot
